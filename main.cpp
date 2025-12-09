@@ -8,7 +8,13 @@ using namespace std;
 void equip_test1(shared_ptr<Character> c1) {
     c1 = make_shared<Armor>(c1);
     c1 = make_shared<Boots>(c1);
-    c1 = make_shared<Sword>(c1);
+    try{
+        c1 = make_shared<Sword>(c1);  
+    }catch(const char* e){
+        cout << "Invalid equip: " << e << endl;
+        auto logger = Logger::getInstance();
+        logger -> log ("[Fail to Equip] ");
+    }
     cout << c1->getDescription()
         << " | Attack: " << c1->getAttack()
         << " | Speed: " << c1->getSpeed()
@@ -17,7 +23,14 @@ void equip_test1(shared_ptr<Character> c1) {
 
 void equip_test2(shared_ptr<Character> c1) {
     c1 = make_shared<Armor>(c1);
-    c1 = make_shared<Bow>(c1);
+    try{
+        c1 = make_shared<Bow>(c1);
+    }catch(const exception& e){
+        cout << "Invalid equip: " << e.what() << endl;
+        auto logger = Logger::getInstance();
+        logger -> log ("[Fail to Equip] ");
+        return;
+    }
     cout << c1->getDescription()
         << " | Attack: " << c1->getAttack()
         << " | Speed: " << c1->getSpeed()
@@ -26,7 +39,14 @@ void equip_test2(shared_ptr<Character> c1) {
 
 void equip_test3(shared_ptr<Character> c1) {
     c1 = make_shared<Boots>(c1);
-    c1 = make_shared<Staff>(c1);
+    try{
+        c1 = make_shared<Staff>(c1);
+    }catch(const exception& e){
+        cout << "Invalid equip: " << e.what() << endl;
+        auto logger = Logger::getInstance();
+        logger -> log ("[Fail to Equip] ");
+        return;
+    }
     cout << c1->getDescription()
         << " | Attack: " << c1->getAttack()
         << " | Speed: " << c1->getSpeed()

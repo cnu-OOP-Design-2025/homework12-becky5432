@@ -14,12 +14,26 @@ private:
 
 
 public:
+    Logger() {
+        logFile.open("Test/output2.txt", std::ios::trunc);
+        log("[Init] Logger started.");
+    }
     static Logger* getInstance(const std::string& filename = "Test/output2.txt") {
-        return nullptr;
+        if(!instance) {
+            instance.reset(new Logger());
+        }
+        init_mtx;
+        return instance.get();
+    }
+    ~Logger(){
+        log("[Shutdown] Logger closed.");
+        logFile.close();
     }
 
     void log(const std::string& message) {
         /* TODO */
+        logFile << message << std::endl;
+        write_mtx;
     }
 
 };

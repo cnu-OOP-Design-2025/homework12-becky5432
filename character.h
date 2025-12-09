@@ -33,7 +33,9 @@ public:
 // 기본 캐릭터
 class Knight : public Character {
 public:
-    Knight() { description = "Knight"; type = CharacterType::Knight;
+    Knight() {description = "Knight"; type = CharacterType::Knight;
+        auto logger = Logger::getInstance();
+        logger -> log ("[Create] Knight");
     }
     int getAttack() const override { return 15; }
     int getSpeed() const override { return 8; }
@@ -43,6 +45,8 @@ public:
 class Wizard : public Character {
 public:
     Wizard() { description = "Wizard"; type = CharacterType::Wizard;
+        auto logger = Logger::getInstance();
+        logger -> log ("[Create] Wizard");
     }
     int getAttack() const override { return 20; }
     int getSpeed() const override { return 10; }
@@ -52,6 +56,8 @@ public:
 class Archer : public Character {
 public:
     Archer() { description = "Archer"; type = CharacterType::Archer;
+        auto logger = Logger::getInstance();
+        logger -> log ("[Create] Archer");
     }
     int getAttack() const override { return 18; }
     int getSpeed() const override { return 15; }
@@ -71,7 +77,10 @@ public:
 // 장비 클래스
 class Armor : public EquipDeco {
 public:
-    Armor(shared_ptr<Character> c) : EquipDeco(c, "Armor") {} 
+    Armor(shared_ptr<Character> c) : EquipDeco(c, "Armor") {
+        auto logger = Logger::getInstance();
+        logger -> log ("[Trying to Equip] " + getDescription());
+    } 
     string getDescription() const override { return character->getDescription() + " + Armor"; }
     int getAttack() const override { return character->getAttack(); }
     int getSpeed() const override { return character->getSpeed() - 2; }
@@ -81,7 +90,10 @@ public:
 
 class Boots : public EquipDeco {
 public:
-    Boots(shared_ptr<Character> c) : EquipDeco(c, "Boots") {} 
+    Boots(shared_ptr<Character> c) : EquipDeco(c, "Boots") {
+        auto logger = Logger::getInstance();
+        logger -> log ("[Trying to Equip] " + getDescription());
+    } 
     string getDescription() const override { return character->getDescription() + " + Boots"; }
     int getAttack() const override { return character->getAttack(); }
     int getSpeed() const override { return character->getSpeed() + 5; }
@@ -91,7 +103,13 @@ public:
 
 class Staff : public EquipDeco {
 public:
-    Staff(shared_ptr<Character> c) : EquipDeco(c, "Staff") {}
+    Staff(shared_ptr<Character> c) : EquipDeco(c, "Staff") {
+        auto logger = Logger::getInstance();
+        logger -> log ("[Trying to Equip] " + getDescription());
+        if(c->getType() != CharacterType::Wizard){
+            throw invalid_argument("Staff requires Wizard");
+        }
+    }
     string getDescription() const override { return character->getDescription() + " + Staff"; }
     int getAttack() const override { return character->getAttack() + 8; }
     int getSpeed() const override { return character->getSpeed(); }
@@ -101,7 +119,10 @@ public:
 
 class Sword : public EquipDeco {
 public:
-    Sword(shared_ptr<Character> c) : EquipDeco(c, "Sword") {} 
+    Sword(shared_ptr<Character> c) : EquipDeco(c, "Sword") {
+        auto logger = Logger::getInstance();
+        logger -> log ("[Trying to Equip] " + getDescription());
+    } 
     string getDescription() const override { return character->getDescription() + " + Sword"; }
     int getAttack() const override { return character->getAttack() + 10; }
     int getSpeed() const override { return character->getSpeed(); }
@@ -111,7 +132,14 @@ public:
 
 class Bow : public EquipDeco {
 public:
-    Bow(shared_ptr<Character> c) : EquipDeco(c, "Bow") {}
+    Bow(shared_ptr<Character> c) : EquipDeco(c, "Bow") {
+        auto logger = Logger::getInstance();
+        logger -> log ("[Trying to Equip] " + getDescription());
+        if((c->getType() == CharacterType::Archer) || (c->getType() == CharacterType::Knight)){
+        }else{
+            throw invalid_argument("Bow requires Archer or Knight");
+        }
+    }
     string getDescription() const override { return character->getDescription() + " + Bow"; }
     int getAttack() const override { return character->getAttack() + 7; }
     int getSpeed() const override { return character->getSpeed() + 2; }
